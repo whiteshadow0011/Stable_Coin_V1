@@ -6,7 +6,7 @@ remapping = [
     "@chainlink/contracts=lib/chainlink-brownie-contracts/contracts/",
     "@opnezeppelin/contracts=lib/openzeppelin-contract/contracts",
 ]
-[invarient]
+[profile.invarient]
 runs=128
 depth=128
 fail_on_revert=false

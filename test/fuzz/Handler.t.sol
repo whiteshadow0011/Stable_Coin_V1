@@ -36,7 +36,7 @@ contract Handler is Test {
     function depositeCollateral(uint256 collateralSeed, uint256 amountCollateral) public {
         ERC20Mock collateral = _getCollateralFromSeed(collateralSeed);
         // address user = users[collateralSeed % users.length];
-        amountCollateral = bound(amountCollateral,1,MAX_DEPOSITE_SIZE);
+        amountCollateral = bound(amountCollateral, 1, MAX_DEPOSITE_SIZE);
         vm.startPrank(msg.sender);
         collateral.mint(msg.sender, amountCollateral);
         collateral.approve(address(dsce), amountCollateral);
@@ -46,7 +46,7 @@ contract Handler is Test {
     }
 
     function mintDsc(uint256 amountDscToMint, uint256 addressSeed) public {
-        if(usersWithCollateralDeposited.length == 0){
+        if (usersWithCollateralDeposited.length == 0) {
             return;
         }
         address sender = usersWithCollateralDeposited[addressSeed % usersWithCollateralDeposited.length];
@@ -55,27 +55,27 @@ contract Handler is Test {
 
         int256 maxDscToMint = (int256(collateralValueInUsd / 2)) - int256(totalDscMinted);
         // console.log("this is maxDscToMint", maxDscToMint);
-        if(maxDscToMint < 0){
+        if (maxDscToMint < 0) {
             return;
         }
 
         amountDscToMint = bound(amountDscToMint, 0, uint256(maxDscToMint));
         // console.log("this is bound for amountOfDscToMint", amountDscToMint);
-        if(amountDscToMint == 0){
+        if (amountDscToMint == 0) {
             return;
         }
 
         vm.startPrank(sender);
-        dsce.mintDSC(amountDscToMint); 
+        dsce.mintDSC(amountDscToMint);
         vm.stopPrank();
-        timesMintIsCalled+=1;
+        timesMintIsCalled += 1;
     }
 
-    function redeemCollateral(uint256 collateralSeed, uint256 amountCollateral) public{
+    function redeemCollateral(uint256 collateralSeed, uint256 amountCollateral) public {
         ERC20Mock collateral = _getCollateralFromSeed(collateralSeed);
-        uint256 maxCollateralToRedeem= dsce.getCollateralBalanceOfUser(msg.sender, address(collateral));
-        amountCollateral = bound(amountCollateral,0,maxCollateralToRedeem);
-        if(amountCollateral == 0){
+        uint256 maxCollateralToRedeem = dsce.getCollateralBalanceOfUser(msg.sender, address(collateral));
+        amountCollateral = bound(amountCollateral, 0, maxCollateralToRedeem);
+        if (amountCollateral == 0) {
             return;
         }
         dsce.redeemCollateral(address(collateral), amountCollateral);

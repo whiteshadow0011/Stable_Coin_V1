@@ -12,7 +12,6 @@ import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.so
 import {MockV3Aggregator} from "../mocks/MockV3Aggregator.sol";
 // import {MockFailedTransferFrom} from "../mocks/MockFailedTransferFrom.sol";
 
-
 contract DSCEngineTest is Test {
     deployDsc deployer;
     DecentralizedStableCoin dsc;
@@ -37,7 +36,7 @@ contract DSCEngineTest is Test {
     function setUp() public {
         deployer = new deployDsc();
         (dsc, dsce, config) = deployer.run();
-        (wethUsdPriceFeed, wbtcPriceFeed, weth,,    ) = config.activeNetworkConfig();
+        (wethUsdPriceFeed, wbtcPriceFeed, weth,,) = config.activeNetworkConfig();
 
         ERC20Mock(weth).mint(USER, STARTING_ERC20_BALANCE);
         ERC20Mock(weth).mint(USER1, STARTING_ERC20_BALANCE);
@@ -213,7 +212,7 @@ contract DSCEngineTest is Test {
         vm.stopPrank();
     }
 
-    function testCalculateHealthFactor() public{
+    function testCalculateHealthFactor() public {
         uint256 expectedHealthFactor = dsce.calculateHealthFactor(AMOUNT_DSC, weth, AMOUNT_COLLATERAL);
         vm.startPrank(USER);
         ERC20Mock(weth).approve(address(dsce), AMOUNT_COLLATERAL);
@@ -227,8 +226,9 @@ contract DSCEngineTest is Test {
     }
 
     function testRevertsIfMintedDscBreaksHealthFactor() public {
-        (, int256 price, , ,) = MockV3Aggregator(wethUsdPriceFeed).latestRoundData();
-        uint256 amountToMint = (AMOUNT_COLLATERAL * (uint256(price) * dsce.getAdditionalFeedPrecesion()))/dsce.getPrecesion();
+        (, int256 price,,,) = MockV3Aggregator(wethUsdPriceFeed).latestRoundData();
+        uint256 amountToMint =
+            (AMOUNT_COLLATERAL * (uint256(price) * dsce.getAdditionalFeedPrecesion())) / dsce.getPrecesion();
         vm.startPrank(USER);
         ERC20Mock(weth).approve(address(dsce), AMOUNT_COLLATERAL);
         uint256 expectedHealthFactor = dsce.calculateHealthFactor(10001e18, weth, AMOUNT_COLLATERAL);
@@ -241,7 +241,7 @@ contract DSCEngineTest is Test {
     ////MintDsc
     /////////////////
 
-    function testRevertIfMintFails() public{
+    function testRevertIfMintFails() public {
         
     }
 

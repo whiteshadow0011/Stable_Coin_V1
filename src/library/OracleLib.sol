@@ -22,7 +22,7 @@ library OracleLib {
 
         if (secondsSince > TIMEOUT) {
             revert OracleLib__StalePrice();
-        }   
+        }
 
         return (roundId, answer, startedAt, updatedAt, answeredInRound);
     }

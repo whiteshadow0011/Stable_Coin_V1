@@ -11,7 +11,7 @@ import {Helperconfig} from "../../script/Helperconfig.s.sol";
 import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {Handler} from "./Handler.t.sol";
 
-contract InvariantTest is StdInvariant, Test{
+contract InvariantTest is StdInvariant, Test {
     deployDsc deployer;
     DSCEngine dsce;
     DecentralizedStableCoin dsc;
@@ -20,17 +20,15 @@ contract InvariantTest is StdInvariant, Test{
     address wbtc;
     Handler handler;
 
-
-
     function setUp() external {
         deployer = new deployDsc();
         (dsc, dsce, config) = deployer.run();
-        ( , , weth, wbtc, ) = config.activeNetworkConfig();
+        (,, weth, wbtc,) = config.activeNetworkConfig();
         handler = new Handler(dsce, dsc);
         targetContract(address(handler));
     }
 
-    function invariant_protocolMustHaveMoreValueThanTotalSupply() public view{
+    function invariant_protocolMustHaveMoreValueThanTotalSupply() public view {
         //get the value of all the collateral in the protocol
         // compare it to all the debt (dsc)
         uint256 totalSupply = dsc.totalSupply();
@@ -44,7 +42,7 @@ contract InvariantTest is StdInvariant, Test{
         console.log("wbtcValue: ", wbtcValue);
         console.log("totalSupply: ", totalSupply);
         console.log("times mint is called:", handler.timesMintIsCalled());
-        
+
         assert(wethValue + wbtcValue >= totalSupply);
     }
 }
